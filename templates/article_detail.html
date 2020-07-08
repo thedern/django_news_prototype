@@ -1,16 +1,26 @@
 {%  extends 'base.html' %}
 
 {%  block content %}
-    <div class="article-entry">
-        <h2>{{ my_article.title }}</h2>
-        <p>by {{ my_article.author }} | {{ my_article.date }}</p>
-        <p>{{ my_article.body }}</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="article-entry">
+                    <h2>{{ my_article.title }}</h2>
+                    <p>by {{ my_article.author }} | {{ my_article.date }}</p>
+                    <p>{{ my_article.body }}</p>
+                    <p>Show List:  {{ my_article.show }}</p>
+                </div>
+
+                <p><a href="{% url 'article_edit' my_article.pk %}">Edit</a></p>
+                <p><a href="{% url 'article_delete' my_article.pk %}">Delete</a></p>
+                <p>Back to <a href="{% url 'article_list' %}">All Articles</a></p>
+                {% if my_article.show %}
+                    <p><a href="{% url 'run_list' my_article.pk %}"><button  class="btn btn-success ml-2">List</button></a></p>
+                {% endif %}
+             </div>
+         </div>
     </div>
 
-    <p><a href="{% url 'article_edit' my_article.pk %}">Edit</a></p>
-    <p><a href="{% url 'article_delete' my_article.pk %}">Delete</a></p>
-    <p>Back to <a href="{% url 'article_list' %}">All Articles</a></p>
-    <p><a href="{% url 'run_list' my_article.pk %}"><button  class="btn btn-success ml-2">List</button></a></p>
 
 
 {% endblock content %}

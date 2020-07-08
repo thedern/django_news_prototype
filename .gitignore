@@ -1,1 +1,5 @@
 venv/
+backup/
+db.sqlite3
+db.sqlite3_back.sql
+__pycache__

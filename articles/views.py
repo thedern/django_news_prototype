@@ -77,22 +77,30 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
 
 class RunList(LoginRequiredMixin, View):
+    login_url = 'login'
+
     def get(self, request, pk):
         geodata = []
-        record = Article.objects.get(pk=pk)
-        body = record.body
+
+        # get the record body based on primary key passed to class method
+        body = Article.objects.get(pk=pk).body
+
+        # split up date
+        ips = body.split(',')
+
+        # need to use python-dotenv and place all urls and keys in on .env file
         url = 'http://api.ipstack.com/{}?access_key={}'
         key = 'b49fc28743af67723f7f03174fca0f52'
-        ips = body.split(',')
-        print('ips', ips)
+
+        # loop over ips from data set
         for ip in ips:
             # strip will protect against /r or /n if user places each entry on a separate line in textbox
             ip = ip.strip()
+            # append to list
             geodata.append(requests.get(url.format(ip, key)).json())
 
-        print('geo', geodata)
+        # create context dictionary to pass back to run_list.html
         context = {
             'data': geodata,
-
         }
         return render(request, 'run_list.html', context)

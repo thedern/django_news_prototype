@@ -5,10 +5,12 @@
     <div class="container border border-primary">
         <div class="row">
             <div class="col-md-12 p-2">
+            {%  if data  %}
                 {% for d in data %}
                     <p>IP requested:  {{ d.ip }}</p>
                     <p>Country:  {{ d.country_name }}</p>
                 {% endfor %}
+            {% endif %}
             </div>
         </div>
     </div>

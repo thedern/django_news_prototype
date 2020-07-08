@@ -14,7 +14,8 @@ class Article(models.Model):
     otherwise.
     """
     # hash pk for security
-    # id = HashidAutoField(allow_int_lookup=True, primary_key=True)
+
+    id = HashidAutoField(allow_int_lookup=True, primary_key=True)
 
     title = models.CharField(max_length=255)
     body = models.TextField()
@@ -26,10 +27,6 @@ class Article(models.Model):
         get_user_model(),
         on_delete=models.CASCADE,
     )
-
-    # create a list out of body items
-    # def body_as_list(self):
-    #     return self.body.split(',')
 
     def __str__(self):
         return self.title
