@@ -1,10 +1,12 @@
 # A page representing a list of objects.
 from django.contrib.auth.mixins import (LoginRequiredMixin, UserPassesTestMixin)
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import ListView, DetailView
+from django.views import View
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
 from .models import Article
+import requests
 
 
 class ArticleListView(LoginRequiredMixin, ListView):
@@ -74,4 +76,23 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class RunList(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        geodata = []
+        record = Article.objects.get(pk=pk)
+        body = record.body
+        url = 'http://api.ipstack.com/{}?access_key={}'
+        key = 'b49fc28743af67723f7f03174fca0f52'
+        ips = body.split(',')
+        print('ips', ips)
+        for ip in ips:
+            # strip will protect against /r or /n if user places each entry on a separate line in textbox
+            ip = ip.strip()
+            geodata.append(requests.get(url.format(ip, key)).json())
 
+        print('geo', geodata)
+        context = {
+            'data': geodata,
+
+        }
+        return render(request, 'run_list.html', context)
